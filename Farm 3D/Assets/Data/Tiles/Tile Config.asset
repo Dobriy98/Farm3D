@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a15c982522e470cb17316901c417a3b, type: 3}
+  m_Name: Tile Config
+  m_EditorClassIdentifier: 
+  tileViewPrefab: {fileID: 6773775923352184341, guid: c6ed5822d5f5e4f0db36ea3bfabec126, type: 3}
+  tileModel:
+    tileUIConfig:
+      tileCanvasPrefab: {fileID: 9200211494547486326, guid: 1cccf5d77521d4a12b8a5b9a14250398, type: 3}
+      tileButtonPrefab: {fileID: 3634723475285282431, guid: d665aeef884d84d3e8ff1e315b9f9705, type: 3}
+      timerUIPrefab: {fileID: 5899511907478581854, guid: d5ad75136045c48a7b82116a180fbd2a, type: 3}
+    cropsToSowing:
+    - {fileID: 11400000, guid: 608d70f17dcf84a6b87de87c01a81de5, type: 2}
+    - {fileID: 11400000, guid: fa6dff4debaea44699ed277c52e16571, type: 2}
+    - {fileID: 11400000, guid: 7a5fd1d4ad1aa4257afb4d7090f46bfd, type: 2}
+    tileCameraState:
+      target: {fileID: 0}
+      positionOffset: {x: 0, y: 1, z: 0}
+      rotationOffset: {x: 0.3, y: 0, z: 0, w: 1}
+      distance: 7
+      speed: 1

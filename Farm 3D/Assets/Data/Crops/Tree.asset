@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0baaa057dd334d9c91c50d715907976f, type: 3}
+  m_Name: Tree
+  m_EditorClassIdentifier: 
+  cropModel:
+    cropType: 1
+    ripeningTime: 15
+    isCollectable: 0
+  cropUI:
+    cropSprite: {fileID: 21300000, guid: f960fcec05224489292f927683a6fb46, type: 3}
+  cropStatesConfig:
+  - percentToSetView: 0
+    cropStatePrefab: {fileID: 1011813245787470742, guid: feeb8789769ae48b189cbf7c8eac82d4, type: 3}
+  - percentToSetView: 50
+    cropStatePrefab: {fileID: 4155210681252672465, guid: 0026c3ecb0d834195954ca24b6c83492, type: 3}
+  - percentToSetView: 100
+    cropStatePrefab: {fileID: 5516638693152085539, guid: 7611d39ee08f544f7b8154c95ed7120a, type: 3}
