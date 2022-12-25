@@ -32,8 +32,8 @@ namespace Core
                 Debug.LogWarning("There is no CameraFollow script on camera");
             }
             
-            ExperienceCounter experienceCounter = new ExperienceCounter(gameplayCanvas);
-            CropCounter cropCounter = new CropCounter(gameplayCanvas);
+            ExperienceCounter experienceCounter = new ExperienceCounter();
+            CropCounter cropCounter = new CropCounter();
             
             ICropFactory cropFactory = new CropFactory(cropsConfigs, updater, cropCounter, experienceCounter);
             
@@ -41,6 +41,7 @@ namespace Core
             MainCharacter mainCharacter = characterFactory.Create();
             
             inputPanel.Initialize(mainCamera);
+            gameplayCanvas.Initialize(cropCounter, experienceCounter);
             
             ITileFactory tileFactory = new TileFactory(tileConfig, mainCharacter, cropFactory, _cameraFollow);
             
