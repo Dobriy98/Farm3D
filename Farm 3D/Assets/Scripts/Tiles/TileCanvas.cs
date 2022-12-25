@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UI;
 using UnityEngine;
@@ -8,14 +9,15 @@ namespace Tiles
     public class TileCanvas: MonoBehaviour
     {
         [SerializeField] private GameObject parentButtons;
+
+        public event Action OnTimerIsReady;
         
         private Canvas _canvas;
+        private TimerUI _timerUI;
         
         private Tile _tile;
         private TileModel _tileModel;
-
-        private TimerUI _timerUI;
-
+        
         private readonly List<TileButton> _tileButtons = new List<TileButton>();
 
         public void Initialize(Tile tile, TileModel tileModel)
@@ -75,7 +77,7 @@ namespace Tiles
 
         private void TimerReady()
         {
-            _tile.ReadyToCollect();
+            OnTimerIsReady?.Invoke();
         }
 
         private void OnDestroy()

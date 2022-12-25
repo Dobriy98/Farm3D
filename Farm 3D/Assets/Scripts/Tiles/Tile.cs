@@ -1,28 +1,27 @@
+using System;
 using Character.Interfaces;
 using Common;
 using Crops;
-using Crops.Interfaces;
 using Factories.Interfaces;
 using Tiles.States;
 using UnityEngine;
 using Utils;
+using Object = UnityEngine.Object;
 
 namespace Tiles
 {
     public class Tile : ITile
     {
-        public TileView TileView { get; set; }
+        public TileView TileView { get; }
         public TileModel TileModel { get; set; }
-        
-        public TileCanvas TileCanvas;
-        
-        public ICrop CurrentCrop;
-        
+
+        public CropType CurrentCropType;
+
+        private TileCanvas _tileCanvas;
         private Fsm<Tile> _fsm;
 
-        public readonly ICropFactory CropFactory;
-        public readonly ICharacter Character;
-
+        private readonly ICropFactory _cropFactory;
+        private readonly ICharacter _character;
         private readonly CameraFollow _cameraFollow;
         
         private const string RightClickSignal = "RightClick";
@@ -32,57 +31,77 @@ namespace Tiles
             TileView = tileView;
             TileModel = tileModel;
             
-            Character = character;
-            CropFactory = cropFactory;
+            _character = character;
+            _cropFactory = cropFactory;
             _cameraFollow = cameraFollow;
         }
         
         public void Initialize()
         {
-            _fsm = new Fsm<Tile>(this, new TileInit());
+            CreateTileCanvas();
+            
+            TileView.OnLeftClick += LeftClickInteract;
+            TileView.OnRightClick += RightClickInteract;
+            TileView.OnLeftClickStopInteract += OnLeftClickStopInteract;
+            TileView.OnDestroyHandler += Destroy;
+            
+            _fsm = new Fsm<Tile>();
+            InitializeStates();
         }
-
-        public void ReadyToCollect()
+        
+        private void CreateTileCanvas()
         {
-            _fsm.ChangeState(new TileReady());
+            _tileCanvas = Object.Instantiate(TileModel.tileUIConfig.tileCanvasPrefab, TileView.transform);
+            _tileCanvas.Initialize(this, TileModel);
         }
 
-        public void RightClickInteract()
+        private void RightClickInteract()
         {
             _fsm.Signal(RightClickSignal);
         }
 
-        public void LeftClickInteract()
+        private void LeftClickInteract()
         {
-            TileCanvas.ShowCanvas(true);
+            _tileCanvas.ShowCanvas(true);
         }
 
-        public void OnLeftClickStopInteract()
+        private void OnLeftClickStopInteract()
         {
-            TileCanvas.ShowCanvas(false);
+            _tileCanvas.ShowCanvas(false);
         }
 
         public void Plant(CropType cropType)
         {
-            _fsm.Signal(cropType);
-
+            CurrentCropType = cropType;
             Vector3 toPoint = Helpers.PointBetween(TileView.transform.position,
-                Character.CharacterView.transform.position, 0.5f);
-            Character.Plant(_fsm, toPoint);
+                _character.CharacterView.transform.position, 0.5f);
+            _character.Plant(_fsm, toPoint);
             
             TileModel.tileCameraState.target = TileView.transform;
             _cameraFollow.State = TileModel.tileCameraState;
             
-            TileCanvas.ShowButtons(false);
+            _tileCanvas.ShowButtons(false);
         }
 
-        public void Destroy()
+        private void Destroy()
         {
             TileView.OnLeftClick -= LeftClickInteract;
             TileView.OnRightClick -= RightClickInteract;
             TileView.OnLeftClickStopInteract -= OnLeftClickStopInteract;
-
             TileView.OnDestroyHandler -= Destroy;
+        }
+
+        private void InitializeStates()
+        {
+            TileGrowth tileGrowthState = new TileGrowth(_cropFactory, _character, this, _tileCanvas);
+            TileFree tileFreeState = new TileFree(_tileCanvas, _character, this);
+            TileReady tileReadyState = new TileReady(_character, _tileCanvas, this);
+
+            _fsm.AddState<TileGrowth>(tileGrowthState);
+            _fsm.AddState<TileFree>(tileFreeState);
+            _fsm.AddState<TileReady>(tileReadyState);
+            
+            _fsm.ChangeState<TileFree>();
         }
     }
 }

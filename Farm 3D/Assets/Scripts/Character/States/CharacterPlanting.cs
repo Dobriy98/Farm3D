@@ -1,38 +1,53 @@
 using Common;
 using Inputs.Interfaces;
 using UnityEngine;
+using Utils;
 using static Common.Fsm<Character.MainCharacter>;
 
 namespace Character.States
 {
-    public class CharacterPlanting: AState
+    public class CharacterPlanting: AState<IFsm>
     {
-        private readonly IFsm _plantingFsm;
+        private readonly CharacterView _characterView;
+        private readonly CharacterModel _characterModel;
+        private readonly IMouseService _mouseService;
+        private readonly CameraFollow _cameraFollow;
+        
+        private IFsm _plantingFsm;
         
         private readonly int _plantAnimationId = Animator.StringToHash("Plant");
 
-        public CharacterPlanting(IFsm plantingFsm)
+        public CharacterPlanting(CharacterView characterView, CharacterModel characterModel, 
+            IMouseService mouseService, CameraFollow cameraFollow)
         {
-            _plantingFsm = plantingFsm;
+            _characterView = characterView;
+            _characterModel = characterModel;
+            _mouseService = mouseService;
+            _cameraFollow = cameraFollow;
         }
+        public override void SetStateArg(IFsm arg)
+        {
+            _plantingFsm = arg;
+        }
+        
         public override void Enter()
         {
-            Context.CharacterView.characterAnimator.SetBool(_plantAnimationId, true);
-            Context.MouseService.OnRightClick += PlantingCanceled;
-            Context.CharacterView.OnPlantAction += PlantingSuccess;
+            _characterView.characterAnimator.SetBool(_plantAnimationId, true);
+            _mouseService.OnRightClick += PlantingCanceled;
+            _characterView.OnPlantAction += PlantingSuccess;
         }
 
         public override void Exit()
         {
-            Context.CameraFollow.State = Context.CharacterModel.characterCameraState;
-            Context.CharacterView.characterAnimator.SetBool(_plantAnimationId, false);
-            Context.MouseService.OnRightClick -= PlantingCanceled;
-            Context.CharacterView.OnPlantAction -= PlantingSuccess;
+            _cameraFollow.State = _characterModel.characterCameraState;
+            _characterView.characterAnimator.SetBool(_plantAnimationId, false);
+            _mouseService.OnRightClick -= PlantingCanceled;
+            _characterView.OnPlantAction -= PlantingSuccess;
         }
 
         private void PlantingSuccess()
         {
-            Fsm.ChangeState(new CharacterStay());
+            Fsm.ChangeState<CharacterStay>();
             _plantingFsm.Signal(PlantingState.Success);
         }
 
@@ -40,5 +55,6 @@ namespace Character.States
         {
             _plantingFsm.Signal(PlantingState.Canceled);
         }
+
     }
 }

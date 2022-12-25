@@ -1,29 +1,49 @@
 using Character;
+using Character.Interfaces;
 using Common;
+using Crops.Interfaces;
 using UnityEngine;
 using Utils;
 using static Common.Fsm<Tiles.Tile>;
 
 namespace Tiles.States
 {
-    public class TileReady: AState, ISignalHandler<CollectingState>, ISignalHandler<string>
+    public class TileReady: AState<ICrop>, ISignalHandler<CollectingState>, ISignalHandler<string>
     {
+        private readonly ICharacter _character;
+        private readonly TileCanvas _tileCanvas;
+        private readonly ITile _currentTile;
+        
+        private ICrop _currentCrop;
+
+        public TileReady(ICharacter character, TileCanvas tileCanvas, ITile currentTile)
+        {
+            _character = character;
+            _tileCanvas = tileCanvas;
+            _currentTile = currentTile;
+        }
+
+        public override void SetStateArg(ICrop arg)
+        {
+            _currentCrop = arg;
+        }
+
         public void Signal(CollectingState signal)
         {
             switch (signal)
             {
                 case CollectingState.Success:
-                    Context.CurrentCrop.Collect();
-                    Context.TileCanvas.HideTimer();
-                    Context.TileCanvas.ShowButtons(true);
+                    _currentCrop.Collect();
+                    _tileCanvas.HideTimer();
+                    _tileCanvas.ShowButtons(true);
             
-                    Fsm.ChangeState(new TileFree());
+                    Fsm.ChangeState<TileFree>();
                     break;
                 case CollectingState.Canceled:
                     break;
             }
             
-            Context.TileCanvas.ShowCanvas(false);
+            _tileCanvas.ShowCanvas(false);
         }
 
         public void Signal(string signal)
@@ -31,14 +51,14 @@ namespace Tiles.States
             switch (signal)
             {
                 case "RightClick":
-                    if (Context.CurrentCrop.CropModel.isCollectable){
-                        Vector3 toPoint = Helpers.PointBetween(Context.TileView.transform.position,
-                            Context.Character.CharacterView.transform.position, 0.5f);
-                        Context.Character.Collect(Fsm, toPoint);
+                    if (_currentCrop.CropModel.isCollectable){
+                        Vector3 toPoint = Helpers.PointBetween(_currentTile.TileView.transform.position,
+                            _character.CharacterView.transform.position, 0.5f);
+                        _character.Collect(Fsm, toPoint);
                     }
                     else
                     {
-                        Context.Character.MoveTo(Context.TileView.Hit.point);
+                        _character.MoveTo(_currentTile.TileView.Hit.point);
                     }
                     break;
             }

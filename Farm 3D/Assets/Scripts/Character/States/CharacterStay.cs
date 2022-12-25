@@ -5,12 +5,18 @@ namespace Character.States
 {
     public class CharacterStay: AState
     {
+        private readonly CharacterView _characterView;
         private readonly int _moveAnimationId = Animator.StringToHash("Move");
+
+        public CharacterStay(CharacterView characterView)
+        {
+            _characterView = characterView;
+        }
 
         public override void Enter()
         {
-            Context.CharacterView.navMeshAgent.velocity = Vector3.zero;
-            Context.CharacterView.characterAnimator.SetFloat(_moveAnimationId, 0);
+            _characterView.navMeshAgent.velocity = Vector3.zero;
+            _characterView.characterAnimator.SetFloat(_moveAnimationId, 0);
         }
     }
 }

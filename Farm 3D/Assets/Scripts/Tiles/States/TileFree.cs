@@ -1,23 +1,34 @@
+using System;
 using Character;
+using Character.Interfaces;
 using Common;
 using Crops;
 using static Common.Fsm<Tiles.Tile>;
 
 namespace Tiles.States
 {
-    public class TileFree: AState, ISignalHandler<PlantingState>, ISignalHandler<string>, ISignalHandler<CropType>
+    public class TileFree: AState, ISignalHandler<PlantingState>, ISignalHandler<string>
     {
-        private CropType _currentCropType;
+        private readonly TileCanvas _tileCanvas;
+        private readonly ICharacter _character;
+        private readonly Tile _currentTile;
+        
+        public TileFree(TileCanvas tileCanvas, ICharacter character, Tile currentTile)
+        {
+            _tileCanvas = tileCanvas;
+            _character = character;
+            _currentTile = currentTile;
+        }
         public void Signal(PlantingState signal)
         {
             switch (signal)
             {
                 case PlantingState.Success:
-                    Fsm.ChangeState(new TileGrowth(_currentCropType));
+                    Fsm.ChangeState<TileGrowth, CropType>(_currentTile.CurrentCropType);
                     break;
                 case PlantingState.Canceled:
-                    Context.TileCanvas.ShowButtons(true);
-                    Context.TileCanvas.ShowCanvas(false);
+                    _tileCanvas.ShowButtons(true);
+                    _tileCanvas.ShowCanvas(false);
                     break;
             }
         }
@@ -27,14 +38,9 @@ namespace Tiles.States
             switch (signal)
             {
                 case "RightClick":
-                    Context.Character.MoveTo(Context.TileView.Hit.point);
+                    _character.MoveTo(_currentTile.TileView.Hit.point);
                     break;
             }
-        }
-
-        public void Signal(CropType signal)
-        {
-            _currentCropType = signal;
         }
     }
 }

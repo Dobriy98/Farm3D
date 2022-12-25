@@ -19,10 +19,10 @@ MonoBehaviour:
     pointsToAdd: 1
   cropUI:
     cropSprite: {fileID: 21300000, guid: f5a55cb30687c417393434bc4918ab21, type: 3}
-  cropStatesConfig:
+  cropViewStatesConfig:
   - percentToSetView: 0
-    cropStatePrefab: {fileID: 5362853903102954436, guid: 59d7a04db4e4649e0b6fd957d8294c4c, type: 3}
+    cropViewStatePrefab: {fileID: 5362853903102954436, guid: 59d7a04db4e4649e0b6fd957d8294c4c, type: 3}
   - percentToSetView: 50
-    cropStatePrefab: {fileID: 5649882888714224972, guid: 21946033f00e34491b4627a85f21f03e, type: 3}
+    cropViewStatePrefab: {fileID: 5649882888714224972, guid: 21946033f00e34491b4627a85f21f03e, type: 3}
   - percentToSetView: 100
-    cropStatePrefab: {fileID: 1633046366127702976, guid: 2ca1d5cf032f74b3793398bfa1e419b8, type: 3}
+    cropViewStatePrefab: {fileID: 1633046366127702976, guid: 2ca1d5cf032f74b3793398bfa1e419b8, type: 3}

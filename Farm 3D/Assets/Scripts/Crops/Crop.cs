@@ -10,44 +10,41 @@ namespace Crops
 {
     public class Crop : ICrop, IUpdateListener
     {
-        public CropModel CropModel { get; set; }
-        public CropView CurrentCropView;
+        public CropModel CropModel { get; }
         
-        public readonly CropViewStatesConfig[] CropViewStatesConfigs;
-        public readonly Updater Updater;
+        private readonly CropViewStatesConfig[] _cropViewStatesConfigs;
+        private readonly Updater _updater;
         
-        public readonly CropCounter CropCounter;
-        public readonly ExperienceCounter ExperienceCounter;
+        private readonly CropCounter _cropCounter;
+        private readonly ExperienceCounter _experienceCounter;
+        
+        private Action _onDestroyHandler;
 
-        public Action OnDestroyHandler;
-
-        public ITile Tile;
+        private ITile _tile;
         
         private Fsm<Crop> _fsm;
         
         private const string CollectSignal = "Collect";
 
-        public float RipeningTime
-        {
-            get => CropModel.ripeningTime;
-            set => CropModel.ripeningTime = value;
-        }
+        public float RipeningTime => CropModel.ripeningTime;
 
         public Crop(CropModel cropModel, CropViewStatesConfig[] cropViewStatesConfigs, Updater updater,
             CropCounter cropCounter, ExperienceCounter experienceCounter)
         {
             CropModel = cropModel;
-            CropViewStatesConfigs = cropViewStatesConfigs;
+            _cropViewStatesConfigs = cropViewStatesConfigs;
 
-            Updater = updater;
-            CropCounter = cropCounter;
-            ExperienceCounter = experienceCounter;
+            _updater = updater;
+            _cropCounter = cropCounter;
+            _experienceCounter = experienceCounter;
         }
 
         public void Initialize(ITile tile)
         {
-            Tile = tile;
-            _fsm = new Fsm<Crop>(this, new CropInit());
+            _tile = tile;
+            
+            _fsm = new Fsm<Crop>();
+            InitializeStates();
         }
 
         public void Collect()
@@ -57,7 +54,7 @@ namespace Crops
 
         public void Plant()
         {
-            _fsm.ChangeState(new CropGrowingState());
+            _fsm.ChangeState<CropGrowingState>();
         }
         public void Tick(float deltaTime)
         {
@@ -66,8 +63,22 @@ namespace Crops
 
         public void Destroy()
         {
-            Updater.RemoveListener(this);
-            OnDestroyHandler -= Destroy;
+            _updater.RemoveListener(this);
+            _onDestroyHandler -= Destroy;
+        }
+
+        private void InitializeStates()
+        {
+            CropInit cropInit = new CropInit(this, _updater, _onDestroyHandler);
+            CropGrowingState cropGrowingState = new CropGrowingState(CropModel, _cropViewStatesConfigs, _tile);
+            CropReady cropReady = new CropReady(CropModel, _cropCounter,
+                _experienceCounter, _onDestroyHandler);
+            
+            _fsm.AddState<CropInit>(cropInit);
+            _fsm.AddState<CropGrowingState>(cropGrowingState);
+            _fsm.AddState<CropReady>(cropReady);
+            
+            _fsm.ChangeState<CropInit>();
         }
     }
 }

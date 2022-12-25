@@ -1,18 +1,23 @@
+using Core;
 using static Common.Fsm<Character.MainCharacter>;
 
 namespace Character.States
 {
     public class CharacterInit: AState
     {
+        private readonly CharacterView _characterView;
+        private readonly CharacterModel _characterModel;
+        public CharacterInit(CharacterView characterView, CharacterModel characterModel)
+        {
+            _characterView = characterView;
+            _characterModel = characterModel;
+        }
         public override void Enter()
         {
-            Context.Updater.AddListener(Context);
-            Context.CharacterModel.characterCameraState.target = Context.CharacterView.transform;
+            _characterModel.characterCameraState.target = _characterView.transform;
 
-            Context.CharacterView.OnDestroyHandler += Context.Destroy;
-            
-            Context.CharacterView.SetInitPosition(Context.CharacterModel.initPosition);
-            Context.CharacterView.SetMovementSpeed(Context.CharacterModel.walkSpeed);
+            _characterView.SetInitPosition(_characterModel.initPosition);
+            _characterView.SetMovementSpeed(_characterModel.walkSpeed);
         }
     }
 }

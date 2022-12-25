@@ -16,12 +16,13 @@ MonoBehaviour:
     cropType: 1
     ripeningTime: 15
     isCollectable: 0
+    pointsToAdd: 1
   cropUI:
     cropSprite: {fileID: 21300000, guid: f960fcec05224489292f927683a6fb46, type: 3}
-  cropStatesConfig:
+  cropViewStatesConfig:
   - percentToSetView: 0
-    cropStatePrefab: {fileID: 1011813245787470742, guid: feeb8789769ae48b189cbf7c8eac82d4, type: 3}
+    cropViewStatePrefab: {fileID: 1011813245787470742, guid: feeb8789769ae48b189cbf7c8eac82d4, type: 3}
   - percentToSetView: 50
-    cropStatePrefab: {fileID: 4155210681252672465, guid: 0026c3ecb0d834195954ca24b6c83492, type: 3}
+    cropViewStatePrefab: {fileID: 4155210681252672465, guid: 0026c3ecb0d834195954ca24b6c83492, type: 3}
   - percentToSetView: 100
-    cropStatePrefab: {fileID: 5516638693152085539, guid: 7611d39ee08f544f7b8154c95ed7120a, type: 3}
+    cropViewStatePrefab: {fileID: 5516638693152085539, guid: 7611d39ee08f544f7b8154c95ed7120a, type: 3}
