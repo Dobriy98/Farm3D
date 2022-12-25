@@ -1,12 +1,14 @@
 using Counters;
 using Crops;
+using TMPro;
+using UnityEngine;
 
 namespace UI
 {
     public class GameplayCanvas : CanvasModel
     {
-        public readonly ObservableUI<string> ExpCount = new ObservableUI<string>();
-        public readonly ObservableUI<string> CarrotCount = new ObservableUI<string>();
+        [SerializeField] private TextMeshProUGUI carrotCount;
+        [SerializeField] private TextMeshProUGUI expCount;
 
         private CropCounter _cropCounter;
         private ExperienceCounter _experienceCounter;
@@ -22,12 +24,12 @@ namespace UI
 
         private void UpdateCropValue(CropType cropType, int value)
         {
-            if (cropType == CropType.Carrot) CarrotCount.Value = value.ToString();
+            if (cropType == CropType.Carrot) carrotCount.text = value.ToString();
         }
 
         private void UpdateExperienceValue(int value)
         {
-            ExpCount.Value = value.ToString();
+            expCount.text = value.ToString();
         }
 
         private void OnDestroy()

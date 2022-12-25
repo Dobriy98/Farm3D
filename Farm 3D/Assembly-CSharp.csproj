@@ -78,7 +78,6 @@
      <Compile Include="Assets\Scripts\Crops\CropsConfigs.cs" />
      <Compile Include="Assets\Scripts\Character\MainCharacter.cs" />
      <Compile Include="Assets\Scripts\Crops\States\CropGrowingState.cs" />
-     <Compile Include="Assets\Scripts\UI\UIElement.cs" />
      <Compile Include="Assets\Scripts\Counters\CropCounter.cs" />
      <Compile Include="Assets\Scripts\Character\Interfaces\IMoveable.cs" />
      <Compile Include="Assets\Scripts\Character\Interfaces\ICharacter.cs" />
@@ -106,13 +105,11 @@
      <Compile Include="Assets\Scripts\Inputs\Interfaces\IMouseLeftClickable.cs" />
      <Compile Include="Assets\Scripts\Crops\CropUI.cs" />
      <Compile Include="Assets\Scripts\Tiles\States\TileReady.cs" />
-     <Compile Include="Assets\Scripts\UI\ObservableUI.cs" />
      <Compile Include="Assets\Scripts\UI\GameplayCanvas.cs" />
      <Compile Include="Assets\Scripts\Crops\States\CropInit.cs" />
      <Compile Include="Assets\Scripts\Crops\CropViewStatesConfig.cs" />
      <Compile Include="Assets\Scripts\Counters\ExperienceCounter.cs" />
      <Compile Include="Assets\Scripts\Tiles\TileConfig.cs" />
-     <Compile Include="Assets\Scripts\UI\UITextMeshPro.cs" />
      <Compile Include="Assets\Scripts\Farm\FarmGenerator.cs" />
      <Compile Include="Assets\Scripts\Character\CharacterModel.cs" />
      <Compile Include="Assets\Scripts\Factories\Interfaces\IFactory.cs" />

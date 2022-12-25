@@ -20,16 +20,5 @@ namespace Utils
             float v3Z = v1.z + (v2.z - v1.z) * k;
             return new Vector3(v3X, 0, v3Z);
         }
-        
-        public static ObservableUI<T> FindObservableUI<T>(this GameObject ctx, string key)
-        {
-            var model = ctx.GetComponentInParent<CanvasModel>();
-            if (model == null) return null;
-            
-            var info = model.GetType().GetField(key);
-            if (info == null) return null;
-            
-            return info.GetValue(model) as ObservableUI<T>;
-        }
     }
 }

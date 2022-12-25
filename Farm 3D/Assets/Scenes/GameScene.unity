@@ -254,12 +254,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   farmGenerationConfig: {fileID: 11400000, guid: 88e4dc98421f54149816fc8af5b192ca, type: 2}
   characterConfig: {fileID: 11400000, guid: 71eee3b2eeec4466898cd898e7d24948, type: 2}
+  cropsConfigs: {fileID: 11400000, guid: cddc0fc02b1ff49aa9f6ec1e5bc43829, type: 2}
+  tileConfig: {fileID: 11400000, guid: bbec98c22af2840c790d8db68b20db78, type: 2}
   mainCamera: {fileID: 963194227}
   inputPanel: {fileID: 2146240908}
-  cropsConfigs: {fileID: 11400000, guid: cddc0fc02b1ff49aa9f6ec1e5bc43829, type: 2}
   updater: {fileID: 1805050547}
   gameplayCanvas: {fileID: 727841659}
-  tileConfig: {fileID: 11400000, guid: bbec98c22af2840c790d8db68b20db78, type: 2}
 --- !u!4 &114077818
 Transform:
   m_ObjectHideFlags: 0
@@ -700,6 +700,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isActiveOnStart: 1
+  carrotCount: {fileID: 1775883795}
+  expCount: {fileID: 1495573605}
 --- !u!1 &749679953
 GameObject:
   m_ObjectHideFlags: 0
@@ -888,7 +890,6 @@ GameObject:
   - component: {fileID: 1495573604}
   - component: {fileID: 1495573606}
   - component: {fileID: 1495573605}
-  - component: {fileID: 1495573607}
   m_Layer: 5
   m_Name: ExpCount
   m_TagString: Untagged
@@ -1012,19 +1013,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1495573603}
   m_CullTransparentMesh: 1
---- !u!114 &1495573607
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1495573603}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09768edd5f4e48148a28b8b07e3f5b4f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  key: ExpCount
 --- !u!1 &1600140073
 GameObject:
   m_ObjectHideFlags: 0
@@ -1113,7 +1101,6 @@ GameObject:
   - component: {fileID: 1775883794}
   - component: {fileID: 1775883796}
   - component: {fileID: 1775883795}
-  - component: {fileID: 1775883797}
   m_Layer: 5
   m_Name: CarrotCount
   m_TagString: Untagged
@@ -1237,19 +1224,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1775883793}
   m_CullTransparentMesh: 1
---- !u!114 &1775883797
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1775883793}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09768edd5f4e48148a28b8b07e3f5b4f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  key: CarrotCount
 --- !u!1 &1805050546
 GameObject:
   m_ObjectHideFlags: 0
