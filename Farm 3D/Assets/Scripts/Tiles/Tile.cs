@@ -1,4 +1,4 @@
-using System;
+using Character;
 using Character.Interfaces;
 using Common;
 using Crops;
@@ -18,13 +18,11 @@ namespace Tiles
         public CropType CurrentCropType;
 
         private TileCanvas _tileCanvas;
-        private Fsm<Tile> _fsm;
+        private Fsm _fsm;
 
         private readonly ICropFactory _cropFactory;
         private readonly ICharacter _character;
         private readonly CameraFollow _cameraFollow;
-        
-        private const string RightClickSignal = "RightClick";
 
         public Tile(TileView tileView, TileModel tileModel, ICharacter character, ICropFactory cropFactory, CameraFollow cameraFollow)
         {
@@ -45,7 +43,7 @@ namespace Tiles
             TileView.OnLeftClickStopInteract += OnLeftClickStopInteract;
             TileView.OnDestroyHandler += Destroy;
             
-            _fsm = new Fsm<Tile>();
+            _fsm = new Fsm();
             InitializeStates();
         }
         
@@ -57,7 +55,14 @@ namespace Tiles
 
         private void RightClickInteract()
         {
-            _fsm.Signal(RightClickSignal);
+            if (_fsm.CompareState<TileReady>())
+            {
+                TileReady tileReady = _fsm.TakeState<TileReady>();
+                tileReady.RightClickSignal();
+                return;
+            }
+                
+            _character.MoveTo(TileView.Hit.point);
         }
 
         private void LeftClickInteract()
@@ -75,7 +80,7 @@ namespace Tiles
             CurrentCropType = cropType;
             Vector3 toPoint = Helpers.PointBetween(TileView.transform.position,
                 _character.CharacterView.transform.position, 0.5f);
-            _character.Plant(_fsm, toPoint);
+            _character.Plant(this, toPoint);
             
             TileModel.tileCameraState.target = TileView.transform;
             _cameraFollow.State = TileModel.tileCameraState;
@@ -102,6 +107,22 @@ namespace Tiles
             _fsm.AddState<TileReady>(tileReadyState);
             
             _fsm.ChangeState<TileFree>();
+        }
+
+        public void Sow(PlantingState plantingState)
+        {
+            if (!_fsm.CompareState<TileFree>()) return;
+            
+            TileFree tileFree = _fsm.TakeState<TileFree>();
+            tileFree.PlantingSignal(plantingState);
+        }
+
+        public void CollectFromPlace(CollectingState collectingState)
+        {
+            if(!_fsm.CompareState<TileReady>()) return;
+
+            TileReady tileReady = _fsm.TakeState<TileReady>();
+            tileReady.CollectingSignal(collectingState);
         }
     }
 }

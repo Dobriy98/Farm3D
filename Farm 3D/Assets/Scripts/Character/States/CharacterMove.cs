@@ -1,6 +1,6 @@
 using UnityEngine;
 using Utils;
-using static Common.Fsm<Character.MainCharacter>;
+using static Common.Fsm;
 
 namespace Character.States
 {
@@ -8,7 +8,7 @@ namespace Character.States
     {
         private readonly CharacterView _characterView;
         private Vector3 _pointToMove;
-        private AState _stateAfterType;
+        private AState _stateAfter;
         
         private readonly int _moveAnimationId = Animator.StringToHash("Move");
         private const float MinDistance = 0;
@@ -20,7 +20,7 @@ namespace Character.States
         public override void SetStateArg(CharacterMoveArgs arg)
         {
             _pointToMove = arg.PointToMove;
-            _stateAfterType = arg.AfterMovingState;
+            _stateAfter = arg.AfterMovingState;
         }
 
         public override void Enter()
@@ -37,7 +37,7 @@ namespace Character.States
   
             if (distance <= MinDistance)
             {
-                Fsm.ChangeState(_stateAfterType);
+                Fsm.ChangeState(_stateAfter);
             }
         }
     }

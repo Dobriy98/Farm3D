@@ -69,6 +69,7 @@
      <Compile Include="Assets\Scripts\Tiles\TileView.cs" />
      <Compile Include="Assets\Scripts\Core\Level.cs" />
      <Compile Include="Assets\Scripts\Tiles\TileModel.cs" />
+     <Compile Include="Assets\Scripts\Tiles\IPlaceToPlant.cs" />
      <Compile Include="Assets\Scripts\Factories\Interfaces\ICropFactory.cs" />
      <Compile Include="Assets\Scripts\Character\Interfaces\IPlant.cs" />
      <Compile Include="Assets\Scripts\Core\Updater.cs" />
@@ -84,6 +85,7 @@
      <Compile Include="Assets\Scripts\Character\States\CharacterInit.cs" />
      <Compile Include="Assets\Scripts\Inputs\Interfaces\IClickable.cs" />
      <Compile Include="Assets\Scripts\Character\States\CharacterMoveArgs.cs" />
+     <Compile Include="Assets\Scripts\Tiles\IPlaceToCollect.cs" />
      <Compile Include="Assets\Scripts\Farm\IFarmGeneration.cs" />
      <Compile Include="Assets\Scripts\Tiles\States\TileFree.cs" />
      <Compile Include="Assets\Scripts\Character\States\CharacterStay.cs" />
@@ -106,7 +108,6 @@
      <Compile Include="Assets\Scripts\Crops\CropUI.cs" />
      <Compile Include="Assets\Scripts\Tiles\States\TileReady.cs" />
      <Compile Include="Assets\Scripts\UI\GameplayCanvas.cs" />
-     <Compile Include="Assets\Scripts\Crops\States\CropInit.cs" />
      <Compile Include="Assets\Scripts\Crops\CropViewStatesConfig.cs" />
      <Compile Include="Assets\Scripts\Counters\ExperienceCounter.cs" />
      <Compile Include="Assets\Scripts\Tiles\TileConfig.cs" />

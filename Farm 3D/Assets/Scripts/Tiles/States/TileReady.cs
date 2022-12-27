@@ -1,14 +1,13 @@
 using Character;
 using Character.Interfaces;
-using Common;
 using Crops.Interfaces;
 using UnityEngine;
 using Utils;
-using static Common.Fsm<Tiles.Tile>;
+using static Common.Fsm;
 
 namespace Tiles.States
 {
-    public class TileReady: AState<ICrop>, ISignalHandler<CollectingState>, ISignalHandler<string>
+    public class TileReady: AState<ICrop>
     {
         private readonly ICharacter _character;
         private readonly TileCanvas _tileCanvas;
@@ -28,7 +27,7 @@ namespace Tiles.States
             _currentCrop = arg;
         }
 
-        public void Signal(CollectingState signal)
+        public void CollectingSignal(CollectingState signal)
         {
             switch (signal)
             {
@@ -46,21 +45,17 @@ namespace Tiles.States
             _tileCanvas.ShowCanvas(false);
         }
 
-        public void Signal(string signal)
+        public void RightClickSignal()
         {
-            switch (signal)
+            if (_currentCrop.CropModel.isCollectable)
             {
-                case "RightClick":
-                    if (_currentCrop.CropModel.isCollectable){
-                        Vector3 toPoint = Helpers.PointBetween(_currentTile.TileView.transform.position,
-                            _character.CharacterView.transform.position, 0.5f);
-                        _character.Collect(Fsm, toPoint);
-                    }
-                    else
-                    {
-                        _character.MoveTo(_currentTile.TileView.Hit.point);
-                    }
-                    break;
+                Vector3 toPoint = Helpers.PointBetween(_currentTile.TileView.transform.position,
+                    _character.CharacterView.transform.position, 0.5f);
+                _character.Collect(_currentTile, toPoint);
+            }
+            else
+            {
+                _character.MoveTo(_currentTile.TileView.Hit.point);
             }
         }
     }

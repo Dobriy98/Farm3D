@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Linq;
 using Tiles;
-using static Common.Fsm<Crops.Crop>;
+using static Common.Fsm;
 
 namespace Crops.States
 {

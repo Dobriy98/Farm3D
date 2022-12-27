@@ -1,20 +1,20 @@
-using Common;
 using Inputs.Interfaces;
+using Tiles;
 using UnityEngine;
 using Utils;
-using static Common.Fsm<Character.MainCharacter>;
+using static Common.Fsm;
 
 namespace Character.States
 {
-    public class CharacterPlanting: AState<IFsm>
+    public class CharacterPlanting: AState<IPlaceToPlant>
     {
         private readonly CharacterView _characterView;
         private readonly CharacterModel _characterModel;
         private readonly IMouseService _mouseService;
         private readonly CameraFollow _cameraFollow;
         
-        private IFsm _plantingFsm;
-        
+        private IPlaceToPlant _plantingPlace;
+         
         private readonly int _plantAnimationId = Animator.StringToHash("Plant");
 
         public CharacterPlanting(CharacterView characterView, CharacterModel characterModel, 
@@ -25,9 +25,9 @@ namespace Character.States
             _mouseService = mouseService;
             _cameraFollow = cameraFollow;
         }
-        public override void SetStateArg(IFsm arg)
+        public override void SetStateArg(IPlaceToPlant arg)
         {
-            _plantingFsm = arg;
+            _plantingPlace = arg;
         }
         
         public override void Enter()
@@ -48,12 +48,12 @@ namespace Character.States
         private void PlantingSuccess()
         {
             Fsm.ChangeState<CharacterStay>();
-            _plantingFsm.Signal(PlantingState.Success);
+            _plantingPlace.Sow(PlantingState.Success);
         }
 
         private void PlantingCanceled(IMouseRightClickable clickable)
         {
-            _plantingFsm.Signal(PlantingState.Canceled);
+            _plantingPlace.Sow(PlantingState.Canceled);
         }
 
     }

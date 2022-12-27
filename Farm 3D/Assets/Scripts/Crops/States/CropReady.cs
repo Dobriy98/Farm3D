@@ -2,12 +2,12 @@ using System;
 using Common;
 using Counters;
 using UnityEngine;
-using static Common.Fsm<Crops.Crop>;
+using static Common.Fsm;
 using Object = UnityEngine.Object;
 
 namespace Crops.States
 {
-    public class CropReady : AState<CropView>, ISignalHandler<string>
+    public class CropReady : AState<CropView>
     {
         private readonly CropModel _cropModel;
         private readonly CropCounter _cropCounter;
@@ -34,16 +34,11 @@ namespace Crops.States
             _experienceCounter.AddExp(expCount);
         }
 
-        public void Signal(string signal)
+        public void CollectingSignal()
         {
-            switch (signal)
-            {
-                case "Collect":
-                    _onDestroyHandler?.Invoke();
-                    _cropCounter.AddTo(_cropModel.cropType, _cropModel.pointsToAdd);
-                    Object.Destroy(_currentCropView.gameObject);
-                    break;
-            }
+            _onDestroyHandler?.Invoke();
+            _cropCounter.AddTo(_cropModel.cropType, _cropModel.pointsToAdd);
+            Object.Destroy(_currentCropView.gameObject);
         }
 
     }

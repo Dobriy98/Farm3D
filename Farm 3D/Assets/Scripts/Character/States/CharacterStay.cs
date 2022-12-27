@@ -1,5 +1,5 @@
 using UnityEngine;
-using static Common.Fsm<Character.MainCharacter>;
+using static Common.Fsm;
 
 namespace Character.States
 {

@@ -1,16 +1,17 @@
 using Common;
 using Inputs.Interfaces;
+using Tiles;
 using UnityEngine;
-using static Common.Fsm<Character.MainCharacter>;
+using static Common.Fsm;
 
 namespace Character.States
 {
-    public class CharacterTakeCrop: AState<IFsm>
+    public class CharacterTakeCrop: AState<IPlaceToCollect>
     {
         private readonly CharacterView _characterView;
         private readonly IMouseService _mouseService;
         
-        private IFsm _collectFsm;
+        private IPlaceToCollect _collectPlace;
         
         private readonly int _collectAnimationId = Animator.StringToHash("Collect");
 
@@ -20,9 +21,9 @@ namespace Character.States
             _mouseService = mouseService;
         }
         
-        public override void SetStateArg(IFsm arg)
+        public override void SetStateArg(IPlaceToCollect arg)
         {
-            _collectFsm = arg;
+            _collectPlace = arg;
         }
         
         public override void Enter()
@@ -42,11 +43,11 @@ namespace Character.States
         private void CollectingSuccess()
         {
             Fsm.ChangeState<CharacterStay>();
-            _collectFsm.Signal(CollectingState.Success);
+            _collectPlace.CollectFromPlace(CollectingState.Success);
         }
         private void CollectingCanceled(IMouseRightClickable clickable)
         {
-            _collectFsm.Signal(CollectingState.Canceled);
+            _collectPlace.CollectFromPlace(CollectingState.Canceled);
         }
 
     }

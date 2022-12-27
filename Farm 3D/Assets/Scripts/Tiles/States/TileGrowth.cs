@@ -3,11 +3,11 @@ using Common;
 using Crops;
 using Crops.Interfaces;
 using Factories.Interfaces;
-using static Common.Fsm<Tiles.Tile>;
+using static Common.Fsm;
 
 namespace Tiles.States
 {
-    public class TileGrowth: AState<CropType>, ISignalHandler<string>
+    public class TileGrowth: AState<CropType>
     {
         private readonly ICropFactory _cropFactory;
         private readonly ICharacter _character;
@@ -48,16 +48,5 @@ namespace Tiles.States
         {
             Fsm.ChangeState<TileReady,ICrop>(_currentCrop);
         }
-
-        public void Signal(string signal)
-        {
-            switch (signal)
-            {
-                case "RightClick":
-                    _character.MoveTo(_currentTile.TileView.Hit.point);
-                    break;
-            }
-        }
-
     }
 }

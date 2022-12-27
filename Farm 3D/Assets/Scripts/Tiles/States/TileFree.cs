@@ -1,13 +1,12 @@
-using System;
 using Character;
 using Character.Interfaces;
 using Common;
 using Crops;
-using static Common.Fsm<Tiles.Tile>;
+using static Common.Fsm;
 
 namespace Tiles.States
 {
-    public class TileFree: AState, ISignalHandler<PlantingState>, ISignalHandler<string>
+    public class TileFree: AState
     {
         private readonly TileCanvas _tileCanvas;
         private readonly ICharacter _character;
@@ -19,7 +18,8 @@ namespace Tiles.States
             _character = character;
             _currentTile = currentTile;
         }
-        public void Signal(PlantingState signal)
+        
+        public void PlantingSignal(PlantingState signal)
         {
             switch (signal)
             {
@@ -29,16 +29,6 @@ namespace Tiles.States
                 case PlantingState.Canceled:
                     _tileCanvas.ShowButtons(true);
                     _tileCanvas.ShowCanvas(false);
-                    break;
-            }
-        }
-        
-        public void Signal(string signal)
-        {
-            switch (signal)
-            {
-                case "RightClick":
-                    _character.MoveTo(_currentTile.TileView.Hit.point);
                     break;
             }
         }

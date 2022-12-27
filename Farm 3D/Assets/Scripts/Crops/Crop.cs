@@ -5,6 +5,7 @@ using Counters;
 using Crops.States;
 using Crops.Interfaces;
 using Tiles;
+using Tiles.States;
 
 namespace Crops
 {
@@ -22,9 +23,7 @@ namespace Crops
 
         private ITile _tile;
         
-        private Fsm<Crop> _fsm;
-        
-        private const string CollectSignal = "Collect";
+        private Fsm _fsm;
 
         public float RipeningTime => CropModel.ripeningTime;
 
@@ -42,14 +41,19 @@ namespace Crops
         public void Initialize(ITile tile)
         {
             _tile = tile;
+            _onDestroyHandler += Destroy;
+            _updater.AddListener(this);
             
-            _fsm = new Fsm<Crop>();
+            _fsm = new Fsm();
             InitializeStates();
         }
 
         public void Collect()
         {
-            _fsm.Signal(CollectSignal);
+            if(!_fsm.CompareState<CropReady>()) return;
+
+            CropReady cropReady = _fsm.TakeState<CropReady>();
+            cropReady.CollectingSignal();
         }
 
         public void Plant()
@@ -61,7 +65,7 @@ namespace Crops
             _fsm.DoUpdate();
         }
 
-        public void Destroy()
+        private void Destroy()
         {
             _updater.RemoveListener(this);
             _onDestroyHandler -= Destroy;
@@ -69,16 +73,12 @@ namespace Crops
 
         private void InitializeStates()
         {
-            CropInit cropInit = new CropInit(this, _updater, _onDestroyHandler);
             CropGrowingState cropGrowingState = new CropGrowingState(CropModel, _cropViewStatesConfigs, _tile);
             CropReady cropReady = new CropReady(CropModel, _cropCounter,
                 _experienceCounter, _onDestroyHandler);
             
-            _fsm.AddState<CropInit>(cropInit);
             _fsm.AddState<CropGrowingState>(cropGrowingState);
             _fsm.AddState<CropReady>(cropReady);
-            
-            _fsm.ChangeState<CropInit>();
         }
     }
 }

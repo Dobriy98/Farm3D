@@ -3,6 +3,7 @@ using Character.States;
 using Common;
 using Core;
 using Inputs.Interfaces;
+using Tiles;
 using UnityEngine;
 using Utils;
 
@@ -17,7 +18,7 @@ namespace Character
         private readonly IMouseService _mouseService;
         private readonly CameraFollow _cameraFollow;
         
-        private Fsm<MainCharacter> _fsm;
+        private Fsm _fsm;
 
         public MainCharacter(CharacterView characterView, CharacterModel characterModel, Updater updater,
             IMouseService mouseService, CameraFollow cameraFollow)
@@ -32,7 +33,7 @@ namespace Character
 
         public void Initialize()
         {
-            _fsm = new Fsm<MainCharacter>();
+            _fsm = new Fsm();
             InitializeStates();
             
             _updater.AddListener(this);
@@ -51,22 +52,22 @@ namespace Character
             _fsm.ChangeState<CharacterMove, CharacterMoveArgs>(args);
         }
 
-        public void Plant(IFsm plantingFsm, Vector3 pointToPlant)
+        public void Plant(IPlaceToPlant plantingPlace, Vector3 pointToPlant)
         {
             CharacterMoveArgs args = new CharacterMoveArgs()
             {
                 PointToMove = pointToPlant,
-                AfterMovingState = _fsm.TakeStateWithArgs<CharacterPlanting, IFsm>(plantingFsm)
+                AfterMovingState = _fsm.TakeStateWithArgs<CharacterPlanting, IPlaceToPlant>(plantingPlace)
             };
             _fsm.ChangeState<CharacterMove, CharacterMoveArgs>(args);
         }
 
-        public void Collect(IFsm collectFsm, Vector3 pointToCollect)
+        public void Collect(IPlaceToCollect collectingPlace, Vector3 pointToCollect)
         {
             CharacterMoveArgs args = new CharacterMoveArgs()
             {
                 PointToMove = pointToCollect,
-                AfterMovingState = _fsm.TakeStateWithArgs<CharacterTakeCrop, IFsm>(collectFsm)
+                AfterMovingState = _fsm.TakeStateWithArgs<CharacterTakeCrop, IPlaceToCollect>(collectingPlace)
             };
             _fsm.ChangeState<CharacterMove, CharacterMoveArgs>(args);
         }
